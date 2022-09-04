@@ -81,10 +81,12 @@ onMounted(() => {
     }
     init.value = true;
   }
-  // document.querySelector('a-scene').addEventListener('arReady', () => {
-  //   console.log('ar-ready');
-
-  // });
+  document.querySelector('a-scene').addEventListener('arReady', () => {
+    console.log('ar-ready');
+  });
+  document.querySelector('a-scene').addEventListener('arError', (event) => {
+    console.log('ar-error', event);
+  });
 });
 onBeforeUnmount(() => {
   document.querySelectorAll('.mindar-ui-overlay').forEach((elem) => elem.remove());

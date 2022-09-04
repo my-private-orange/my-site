@@ -65,11 +65,8 @@
     }
 
     function initFakeLoading () {
-      console.log('hihihi 1')
       // 只有特定的URL才会出现假的fake loading
       if (/^#\/\w+\-ar/.test(location.hash)) {
-        console.log('hihihi 2')
-
         var progress = document.querySelector('.fake-progress')
         if (progress) {
           const isMobile = mobileCheck()

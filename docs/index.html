@@ -22,7 +22,7 @@
     var vConsole = new VConsole();
     console.log('Hello world');
   </script>
-  <script type="module" crossorigin src="/skongmiao/assets/index.b58bfd4d.js"></script>
+  <script type="module" crossorigin src="/skongmiao/assets/index.5ab4ff62.js"></script>
   <link rel="stylesheet" href="/skongmiao/assets/index.4ff783de.css">
 </head>
 
@@ -67,11 +67,8 @@
     }
 
     function initFakeLoading () {
-      console.log('hihihi 1')
       // 只有特定的URL才会出现假的fake loading
       if (/^#\/\w+\-ar/.test(location.hash)) {
-        console.log('hihihi 2')
-
         var progress = document.querySelector('.fake-progress')
         if (progress) {
           const isMobile = mobileCheck()
