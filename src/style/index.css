@@ -1,0 +1,32 @@
+html,
+body,
+#app {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* font-family: 'FZQKBYSJW'; */
+}
+
+div {
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar-track {
+    /* background: rgba(0, 242, 255, 0.32); */
+    /* border-radius: 0; */
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    /* width: 0.2vw; */
+    /* height: 10px; */
+}
+
+::-webkit-scrollbar-thumb {
+    /* cursor: pointer;
+    border-radius: 0px;
+    width: 0.2vw;
+    background-color: #00F2FF;
+    transition: color 0.2s ease; */
+}
