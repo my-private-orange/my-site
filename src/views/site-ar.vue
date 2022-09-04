@@ -72,7 +72,7 @@ onMounted(() => {
         const targetElem = document.querySelector(`#target-${index}`);
         targetElem.addEventListener('targetFound', () => {
           console.log('targetFound', index);
-          window.location.assign(urls.value[index]);
+          window.open(urls.value[index]);
         });
         targetElem.addEventListener('targetLost', () => {
           console.log('targetLost', index);
