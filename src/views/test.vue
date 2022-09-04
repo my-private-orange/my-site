@@ -26,9 +26,15 @@ onMounted(() => {
     'srcObject' in videoElement ? ((videoElement.src = ''), (videoElement.srcObject = stream)) : (videoElement.src = URL.createObjectURL(stream));
     videoElement.play();
   };
+  // var s = {
+  //   audio: true,
+  //   video: { width: 1920, height: 1080 },
+  // };
   var s = {
-    audio: true,
-    video: { width: 1920, height: 1080 },
+    audio: false,
+    video: {
+      facingMode: 'environment',
+    },
   };
   const d = (err) => {
     console.error(err);
