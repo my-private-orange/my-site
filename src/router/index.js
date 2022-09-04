@@ -17,6 +17,10 @@ const routes = [
     path: '/site-ar',
     component: () => import('@/views/site-ar.vue'),
   },
+  {
+    path: '/test',
+    component: () => import('@/views/test.vue'),
+  },
 ];
 
 const router = createRouter({
