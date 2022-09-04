@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "image-capture": "^0.4.0",
     "mind-ar": "^1.1.5",
     "vue": "^3.2.25",
     "vue-router": "^4.0.13",

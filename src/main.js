@@ -1,4 +1,5 @@
 import adapter from 'webrtc-adapter';
+import 'image-capture';
 import { createApp } from 'vue';
 import App from './App.vue';
 import '@/style/index.css';
