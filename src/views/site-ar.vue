@@ -65,26 +65,26 @@ const urls = ref([
 ]);
 let imageIndex = 1;
 onMounted(() => {
-  document.querySelector('a-scene').addEventListener('arReady', () => {
-    console.log('ar-ready');
-    window.dispatchEvent(window.pageLoadedEvent);
-
-    if (!init.value) {
-      for (var i = 0; i <= urls.value.length - 1; i++) {
-        (function (index) {
-          const targetElem = document.querySelector(`#target-${index}`);
-          targetElem.addEventListener('targetFound', () => {
-            console.log('targetFound', index);
-            window.location.assign(urls.value[index]);
-          });
-          targetElem.addEventListener('targetLost', () => {
-            console.log('targetLost', index);
-          });
-        })(i);
-      }
-      init.value = true;
+  window.dispatchEvent(window.pageLoadedEvent);
+  if (!init.value) {
+    for (var i = 0; i <= urls.value.length - 1; i++) {
+      (function (index) {
+        const targetElem = document.querySelector(`#target-${index}`);
+        targetElem.addEventListener('targetFound', () => {
+          console.log('targetFound', index);
+          window.location.assign(urls.value[index]);
+        });
+        targetElem.addEventListener('targetLost', () => {
+          console.log('targetLost', index);
+        });
+      })(i);
     }
-  });
+    init.value = true;
+  }
+  // document.querySelector('a-scene').addEventListener('arReady', () => {
+  //   console.log('ar-ready');
+
+  // });
 });
 onBeforeUnmount(() => {
   document.querySelectorAll('.mindar-ui-overlay').forEach((elem) => elem.remove());
