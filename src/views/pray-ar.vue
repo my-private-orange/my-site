@@ -1,18 +1,13 @@
 <template>
   <div class="container">
     <a-scene
-      mindar-image="imageTargetSrc: /skongmiao/targets_5.mind;"
+      mindar-image="imageTargetSrc: target_prays.mind;"
       color-space="sRGB"
       renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
     >
       <a-assets>
-        <img
-          id="card"
-          crossOrigin="Anonymous"
-          src="../assets/image/pray-marker1.jpg"
-        />
         <img
           id="word"
           crossOrigin="Anonymous"
@@ -34,6 +29,7 @@
       >
         <a-plane
           id="word-plane-1"
+          material="transparent: true"
           src="#word"
           position="0 0 0"
           :height="387 / 366"
@@ -47,6 +43,7 @@
       >
         <a-plane
           id="word-plane-2"
+          material="transparent: true"
           src="#word"
           position="0 0 0"
           :height="387 / 366"
@@ -60,6 +57,7 @@
       >
         <a-plane
           id="word-plane-3"
+          material="transparent: true"
           src="#word"
           position="0 0 0"
           :height="387 / 366"
@@ -76,30 +74,35 @@
 
 import { useRouter } from 'vue-router';
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import { MAX_UNSIGNED_VALUE } from 'long';
+
 const router = useRouter();
 const to = (value) => {
   router.push(value);
 };
 let imageIndex = 1;
-const IMAGE_MAX_INDEX = 36;
-const wordImageUrl = ref(new URL(`../assets/image/words/${imageIndex}.png`, import.meta.url).href);
+const wordImageUrl = ref('');
 onMounted(() => {
+  document.querySelector('a-scene').addEventListener('arReady', () => {
+    console.log('ar-ready');
+    window.dispatchEvent(window.pageLoadedEvent);
+  });
   for (var i = 1; i <= 3; i++) {
     (function (index) {
       const targetElem = document.querySelector(`#target-${index}`);
       targetElem.addEventListener('targetFound', () => {
+        wordImageUrl.value = new URL(`../assets/image/words/${imageIndex}_${index}-min.png`, import.meta.url).href;
         console.log('targetFound', index);
       });
       targetElem.addEventListener('targetLost', () => {
         console.log('targetLost', index);
-        if (imageIndex === MAX_UNSIGNED_VALUE) {
+        if (imageIndex === 28) {
           imageIndex = 1;
         } else {
           imageIndex++;
         }
         document.querySelector(`#word-plane-${index}`).setAttribute('src', '');
-        wordImageUrl.value = new URL(`../assets/image/words/${imageIndex}.png`, import.meta.url).href;
+        wordImageUrl.value = new URL(`../assets/image/words/${imageIndex}_${index}-min.png`, import.meta.url).href;
+        // wordImageUrl.value = new URL(`../assets/image/test.png`, import.meta.url).href;
         nextTick(() => {
           document.querySelector(`#word-plane-${index}`).setAttribute('src', '#word');
         });

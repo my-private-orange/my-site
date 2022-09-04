@@ -295,6 +295,9 @@ export default {
     shouldShowOnlySecurity() {
       return this.hiddenOverlayIndexs.length === 4 && this.hiddenOverlayIndexs.every((val, index) => val === [0, 2, 3, 4][index]);
     },
+    arrowSize() {
+      return 0.015873 * this.realCanvasWidth;
+    },
   },
   watch: {
     canvasHeight() {
@@ -305,11 +308,17 @@ export default {
       }
     },
     hiddenOverlayIndexs() {
+      const isWalking = this.isWalking;
       if (this.isAnimating) {
-        cancelAnimationFrame();
-        this.drawRoute();
+        if (!isWalking) {
+          cancelAnimationFrame();
+          this.drawFrame();
+        } else {
+          cancelAnimationFrame();
+          this.drawRoute();
+        }
       } else {
-        this.initCanvas();
+        this.initCanvas({ keepScale: true });
       }
     },
   },
@@ -351,7 +360,7 @@ export default {
         this.drawRoute();
       }
     },
-    initCanvas() {
+    initCanvas({ keepScale } = {}) {
       if (this.isAnimating || this.isWalking) {
         this.ctx.closePath();
         cancelAnimationFrame();
@@ -408,7 +417,7 @@ export default {
         this.drawOverlay();
       }
 
-      if (this.scale !== 1) {
+      if (!keepScale && this.scale !== 1) {
         this.scaleCanvas(1, { x: 0.5, y: 0.5 });
       }
 
@@ -498,27 +507,21 @@ export default {
     },
     drawRoute() {
       this.isAnimating = true;
-      // 画出路线
-
       let lastSetTime = 0;
-      const arrowSize = 0.015873 * this.realCanvasWidth;
-
       const targetScale = this.realCanvasHeight / this.renderHeight;
 
       // this.canvas.style.transition = 'transform 0.5s'
       requestAnimationFrame((time) => {
         this.isWalking = true;
-        this.ctx.clearRect(0, 0, this.realCanvasWidth, this.realCanvasHeight);
-        // if (scale < 2) {
-        // 	scale+=0.01
-        // 	console.log(scale)
-        // 	this.ctx.scale(1.01, 1.01)
-        // }
 
-        this.drawBG();
-        // if (currentIndex > 40 && this.canvas.style.transition !== 'unset') {
-        //   this.canvas.style.transition = 'unset'
-        // }
+        this.drawFrame();
+
+        arrowPoints = arrowPoints.map((arrowPoint) => {
+          const currentIndex = arrowPoint[3];
+          const nextIndex = currentIndex + 1 > pathPoints.length - 1 ? 0 : currentIndex + 1;
+          return pathPoints[nextIndex] ? [...pathPoints[nextIndex], nextIndex] : arrowPoint;
+        });
+
         if (currentIndex < pathPoints.length) {
           const [currentX, currentY] = pathPoints[currentIndex];
           let nextPoint = this.getPixelCoordFromRelative(currentX, currentY);
@@ -549,48 +552,67 @@ export default {
           this.isWalking = false;
           this.hasFinishedWalking = true;
         }
-        this.ctx.strokeStyle = '#c9273a';
-        this.ctx.setLineDash([3, 2]);
-        // this.ctx.lineDashOffset = currentIndex
-        this.ctx.lineWidth = 1.5;
-
-        this.ctx.stroke();
-
-        arrowPoints = arrowPoints.map((arrowPoint) => {
-          const currentIndex = arrowPoint[3];
-          const nextIndex = currentIndex + 1 > pathPoints.length - 1 ? 0 : currentIndex + 1;
-          return pathPoints[nextIndex] ? [...pathPoints[nextIndex], nextIndex] : arrowPoint;
-        });
-
-        arrowPoints.forEach(([x, y, direction]) => {
-          let { x: centerX, y: centerY } = this.getPixelCoordFromRelative(x, y);
-          if (direction === DIRECTION_UP) {
-            centerX -= arrowSize / 2;
-            this.ctx.drawImage(arrowImageUp, centerX, centerY, arrowSize, arrowSize);
-          }
-          if (direction === DIRECTION_DOWN) {
-            centerX -= arrowSize / 2;
-            this.ctx.drawImage(arrowImageDown, centerX, centerY, arrowSize, arrowSize);
-          }
-          if (direction === DIRECTION_RIGHT) {
-            centerY -= arrowSize / 2;
-            this.ctx.drawImage(arrowImageRight, centerX, centerY, arrowSize, arrowSize);
-          }
-          if (direction === DIRECTION_LEFT) {
-            centerY -= arrowSize / 2;
-            this.ctx.drawImage(arrowImageLeft, centerX, centerY, arrowSize, arrowSize);
-          }
-        });
-
-        const lastPathPoint = pathPoints[currentIndex < pathPoints.length ? currentIndex : pathPoints.length - 1];
-        let { x: lastPathPointX, y: lastPathPointY } = this.getPixelCoordFromRelative(lastPathPoint[0], lastPathPoint[1]);
-        const personWidth = 0.052 * this.realCanvasWidth;
-        const personHeight = personWidth * (81 / 56);
-        lastPathPointX -= personWidth / 2;
-        lastPathPointY -= personHeight;
-        this.drawOverlay();
-        this.ctx.drawImage(personImage, lastPathPointX, lastPathPointY, 0.052 * this.realCanvasWidth, 0.052 * this.realCanvasWidth * (81 / 56));
       }, 5);
+    },
+
+    drawFrame() {
+      this.ctx.clearRect(0, 0, this.realCanvasWidth, this.realCanvasHeight);
+      // if (scale < 2) {
+      // 	scale+=0.01
+      // 	console.log(scale)
+      // 	this.ctx.scale(1.01, 1.01)
+      // }
+
+      this.drawBG();
+      // if (currentIndex > 40 && this.canvas.style.transition !== 'unset') {
+      //   this.canvas.style.transition = 'unset'
+      // }
+
+      this.drawLine();
+      this.drawArrows();
+
+      this.drawOverlay();
+      this.drawPerson();
+    },
+    drawLine() {
+      this.ctx.strokeStyle = '#c9273a';
+      this.ctx.setLineDash([3, 2]);
+      // this.ctx.lineDashOffset = currentIndex
+      this.ctx.lineWidth = 1.5;
+
+      this.ctx.stroke();
+    },
+    drawArrows() {
+      const arrowSize = this.arrowSize;
+
+      arrowPoints.forEach(([x, y, direction]) => {
+        let { x: centerX, y: centerY } = this.getPixelCoordFromRelative(x, y);
+        if (direction === DIRECTION_UP) {
+          centerX -= arrowSize / 2;
+          this.ctx.drawImage(arrowImageUp, centerX, centerY, arrowSize, arrowSize);
+        }
+        if (direction === DIRECTION_DOWN) {
+          centerX -= arrowSize / 2;
+          this.ctx.drawImage(arrowImageDown, centerX, centerY, arrowSize, arrowSize);
+        }
+        if (direction === DIRECTION_RIGHT) {
+          centerY -= arrowSize / 2;
+          this.ctx.drawImage(arrowImageRight, centerX, centerY, arrowSize, arrowSize);
+        }
+        if (direction === DIRECTION_LEFT) {
+          centerY -= arrowSize / 2;
+          this.ctx.drawImage(arrowImageLeft, centerX, centerY, arrowSize, arrowSize);
+        }
+      });
+    },
+    drawPerson() {
+      const lastPathPoint = pathPoints[currentIndex < pathPoints.length ? currentIndex : pathPoints.length - 1];
+      let { x: lastPathPointX, y: lastPathPointY } = this.getPixelCoordFromRelative(lastPathPoint[0], lastPathPoint[1]);
+      const personWidth = 0.052 * this.realCanvasWidth;
+      const personHeight = personWidth * (81 / 56);
+      lastPathPointX -= personWidth / 2;
+      lastPathPointY -= personHeight;
+      this.ctx.drawImage(personImage, lastPathPointX, lastPathPointY, 0.052 * this.realCanvasWidth, 0.052 * this.realCanvasWidth * (81 / 56));
     },
     scaleCanvas(scale = this.scale, { x, y } = { x: this.transformOrigin[0], y: this.transformOrigin[1] }) {
       let _scale = scale;

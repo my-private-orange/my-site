@@ -13,6 +13,10 @@ const routes = [
     path: '/pray-ar',
     component: () => import('@/views/pray-ar.vue'),
   },
+  {
+    path: '/site-ar',
+    component: () => import('@/views/site-ar.vue'),
+  },
 ];
 
 const router = createRouter({
