@@ -65,6 +65,7 @@ const urls = ref([
 ]);
 let imageIndex = 1;
 onMounted(() => {
+  console.log('onMounted');
   document.querySelector('a-scene').addEventListener('arReady', () => {
     console.log('ar-ready');
     // window.dispatchEvent(window.pageLoadedEvent);
@@ -100,6 +101,8 @@ onMounted(() => {
   });
 });
 onBeforeUnmount(() => {
+  console.log('onBeforeUnmount');
+
   document.querySelectorAll('.mindar-ui-overlay').forEach((elem) => elem.remove());
 });
 </script>

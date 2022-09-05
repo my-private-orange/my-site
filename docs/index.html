@@ -14,42 +14,12 @@
   <script src="mindar-image.prod.js"></script>
   <script src="https://unpkg.com/aframe@1.2.0/dist/aframe.min.js"></script>
   <script src="mindar-image-aframe.prod.js"></script>
-
-  <!-- 下面的js地址可用，也可自行更换成自己的地址 -->
-  <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
-  <script>
-    // 初始化
-    var vConsole;
-    var touchcount = 0;
-    var lastTouchTime;
-    window.addEventListener('touchstart', (event) => {
-      if (touchcount > 15) {
-        if (vConsole) {
-          vConsole.destroy()
-          vConsole = null;
-        } else {
-          vConsole = new VConsole()
-        }
-        touchcount = 0;
-        return;
-      }
-
-      lastTouchTime = Date.now()
-
-    })
-
-    window.addEventListener('touchend', (event) => {
-      const touch = event.touches[0] || event.changedTouches[0]
-      if (touch && touch.clientX < 20 && touch.clientY < 20) {
-        if (Date.now() - lastTouchTime < 300) {
-          touchcount++;
-        } else {
-          touchcount = 0;
-        }
-      }
-    })
-  </script>
-  <script type="module" crossorigin src="/skongmiao/assets/index.a6d73d91.js"></script>
+  <style>
+    #__vconsole {
+      display: none;
+    }
+  </style>
+  <script type="module" crossorigin src="/skongmiao/assets/index.58cf91eb.js"></script>
   <link rel="stylesheet" href="/skongmiao/assets/index.4ff783de.css">
 </head>
 
@@ -164,6 +134,43 @@
 
   </script>
   
+  <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+  <script>
+    // 初始化
+    var vConsole = new VConsole();
+    var touchcount = 0;
+    var lastTouchTime;
+    function isHidden (el) {
+      var style = window.getComputedStyle(el);
+      return (style.display === 'none')
+    }
+    window.addEventListener('touchstart', (event) => {
+      const elem = document.querySelector('#__vconsole');
+      if (touchcount > 15) {
+        if (isHidden(elem)) {
+          elem.style.display = 'block'
+        } else {
+          elem.style.display = 'none'
+        }
+        touchcount = 0;
+        return;
+      }
+
+      lastTouchTime = Date.now()
+
+    })
+
+    window.addEventListener('touchend', (event) => {
+      const touch = event.touches[0] || event.changedTouches[0]
+      if (touch && touch.clientX < 20 && touch.clientY < 20) {
+        if (Date.now() - lastTouchTime < 300) {
+          touchcount++;
+        } else {
+          touchcount = 0;
+        }
+      }
+    })
+  </script>
 </body>
 
 </html>
