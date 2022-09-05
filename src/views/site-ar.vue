@@ -67,7 +67,7 @@ let imageIndex = 1;
 onMounted(() => {
   document.querySelector('a-scene').addEventListener('arReady', () => {
     console.log('ar-ready');
-    window.dispatchEvent(window.pageLoadedEvent);
+    // window.dispatchEvent(window.pageLoadedEvent);
   });
   if (!init.value) {
     for (var i = 0; i <= urls.value.length - 1; i++) {

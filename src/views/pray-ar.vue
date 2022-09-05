@@ -84,7 +84,7 @@ const wordImageUrl = ref('');
 onMounted(() => {
   document.querySelector('a-scene').addEventListener('arReady', () => {
     console.log('ar-ready');
-    window.dispatchEvent(window.pageLoadedEvent);
+    // window.dispatchEvent(window.pageLoadedEvent);
   });
   for (var i = 1; i <= 3; i++) {
     (function (index) {
