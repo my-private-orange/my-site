@@ -212,6 +212,8 @@
             }, 500)
           });
 
+          let increment = 50
+
           interval = setInterval(() => {
             // 最终会停在99%
             if (current >= 99) {
@@ -223,7 +225,8 @@
             if (current >= 90) {
               current += 1;
             } else {
-              current += 10;
+              current += increment;
+              increment = 10
             }
           }, 1000)
         }
