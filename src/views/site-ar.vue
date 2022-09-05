@@ -75,6 +75,8 @@ onMounted(() => {
         const targetElem = document.querySelector(`#target-${index}`);
         targetElem.addEventListener('targetFound', () => {
           console.log('targetFound', index);
+          console.log('window.isWechat', window.isWechat);
+          console.log('url', urls.value[index]);
           if (window.isWechat) {
             wx.miniProgram.navigateTo({
               url: '/pages/webview/webview?src=' + encodeURIComponent(urls.value[index]),

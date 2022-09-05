@@ -16,13 +16,40 @@
   <script src="mindar-image-aframe.prod.js"></script>
 
   <!-- 下面的js地址可用，也可自行更换成自己的地址 -->
-  <!-- <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+  <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
   <script>
     // 初始化
-    var vConsole = new VConsole();
-    console.log('Hello world');
-  </script> -->
-  <script type="module" crossorigin src="/skongmiao/assets/index.a915825f.js"></script>
+    var vConsole;
+    var touchcount = 0;
+    var lastTouchTime;
+    window.addEventListener('touchstart', (event) => {
+      if (touchcount > 15) {
+        if (vConsole) {
+          vConsole.destroy()
+          vConsole = null;
+        } else {
+          vConsole = new VConsole()
+        }
+        touchcount = 0;
+        return;
+      }
+
+      lastTouchTime = Date.now()
+
+    })
+
+    window.addEventListener('touchend', (event) => {
+      const touch = (event.touches || event.changedTouches)[0]
+      if (touch && touch.clientX < 20 && touch.clientY < 20) {
+        if (Date.now() - lastTouchTime < 300) {
+          touchcount++;
+        } else {
+          touchcount = 0;
+        }
+      }
+    })
+  </script>
+  <script type="module" crossorigin src="/skongmiao/assets/index.a6d73d91.js"></script>
   <link rel="stylesheet" href="/skongmiao/assets/index.4ff783de.css">
 </head>
 
