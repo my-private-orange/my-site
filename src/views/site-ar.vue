@@ -65,7 +65,10 @@ const urls = ref([
 ]);
 let imageIndex = 1;
 onMounted(() => {
-  window.dispatchEvent(window.pageLoadedEvent);
+  document.querySelector('a-scene').addEventListener('arReady', () => {
+    console.log('ar-ready');
+    window.dispatchEvent(window.pageLoadedEvent);
+  });
   if (!init.value) {
     for (var i = 0; i <= urls.value.length - 1; i++) {
       (function (index) {
@@ -87,9 +90,9 @@ onMounted(() => {
     }
     init.value = true;
   }
-  document.querySelector('a-scene').addEventListener('arReady', () => {
-    console.log('ar-ready');
-  });
+  // document.querySelector('a-scene').addEventListener('arReady', () => {
+  //   console.log('ar-ready');
+  // });
   document.querySelector('a-scene').addEventListener('arError', (event) => {
     console.log('ar-error', event);
   });
