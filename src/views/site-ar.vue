@@ -72,7 +72,13 @@ onMounted(() => {
         const targetElem = document.querySelector(`#target-${index}`);
         targetElem.addEventListener('targetFound', () => {
           console.log('targetFound', index);
-          window.open(urls.value[index]);
+          if (window.isWechat) {
+            wx.miniProgram.navigateTo({
+              url: '/pages/webview/webview?src=' + encodeURIComponent(urls.value[index]),
+            });
+          } else {
+            window.location = urls.value[index];
+          }
         });
         targetElem.addEventListener('targetLost', () => {
           console.log('targetLost', index);
