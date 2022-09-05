@@ -19,7 +19,7 @@
       display: none;
     }
   </style>
-  <script type="module" crossorigin src="/skongmiao/assets/index.58cf91eb.js"></script>
+  <script type="module" crossorigin src="/skongmiao/assets/index.a4080132.js"></script>
   <link rel="stylesheet" href="/skongmiao/assets/index.4ff783de.css">
 </head>
 
@@ -162,7 +162,7 @@
 
     window.addEventListener('touchend', (event) => {
       const touch = event.touches[0] || event.changedTouches[0]
-      if (touch && touch.clientX < 20 && touch.clientY < 20) {
+      if (touch && touch.clientX < 50 && touch.clientY < 50) {
         if (Date.now() - lastTouchTime < 300) {
           touchcount++;
         } else {

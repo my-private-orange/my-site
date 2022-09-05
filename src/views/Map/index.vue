@@ -930,7 +930,7 @@ export default {
     .dialog {
       width: 20.3125rem;
       height: 24.46875rem;
-      background-image: url(../../assets/image/tuli-bg.png);
+      background-image: url(../../assets/image/tuli-bg.jpeg);
       background-size: 100% 100%;
       background-repeat: no-repeat;
       position: absolute;

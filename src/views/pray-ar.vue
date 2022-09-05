@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <a-scene
-      mindar-image="imageTargetSrc: target_prays.mind;"
+      mindar-image="imageTargetSrc: https://img.vrwenbo.com/rtf7d42gczeuv9k0ijpq3m1xl5hyswbn.mind;"
       color-space="sRGB"
       renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"

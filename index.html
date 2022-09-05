@@ -160,7 +160,7 @@
 
     window.addEventListener('touchend', (event) => {
       const touch = event.touches[0] || event.changedTouches[0]
-      if (touch && touch.clientX < 20 && touch.clientY < 20) {
+      if (touch && touch.clientX < 50 && touch.clientY < 50) {
         if (Date.now() - lastTouchTime < 300) {
           touchcount++;
         } else {
