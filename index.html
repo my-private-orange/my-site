@@ -133,10 +133,64 @@
     .fake-progress .el-progress-bar__inner::after {
       content: "";
     }
+
+    .cover_loading {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+
+    .footer_loading {
+      padding-top: 0.9375rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      z-index: 1001;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 3.3%;
+    }
+
+    .footer_loading .styled-button {
+      width: 11.28125rem;
+      height: 2.875rem !important;
+      font-size: 1.125rem !important;
+      line-height: 1 !important;
+      padding-right: 6% !important;
+      padding-bottom: 1% !important;
+      background-image: url(/skongmiao/styled-button.png);
+      width: 11rem;
+      height: 2.625rem;
+      line-height: 2.625rem;
+      font-size: 1.125rem;
+      background-size: 100% 92%;
+      background-repeat: no-repeat;
+      color: #ffffff;
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      text-align: center;
+      padding-right: 12%;
+      padding-left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 </head>
 
 <body>
+  <img src="https://img.vrwenbo.com/lbn5iu4pfrk9s3xv6t0jc1mezqw7y8ad.jpeg" alt="tip-image" class="cover_loading"
+    style="display: none;">
+  <div class="footer_loading" style="display: none;"><button class="styled-button">确认</button></div>
   <!-- JS文件加载完之前，会显示这个静态的LOADING页面，进度条的进度百分数是假的 -->
   <div class="fake-progress" style="display: none;">
     <img src="phone_logo.png" alt="" class="moren-img" />
@@ -156,6 +210,21 @@
   <div id="app"></div>
 
   <script>
+    document.querySelector('.styled-button').addEventListener('click', () => {
+      document.querySelector('.footer_loading').remove()
+      document.querySelector('.cover_loading').remove()
+    })
+    function initCover () {
+      if (/^#\/site\-ar/.test(location.hash)) {
+        document.querySelector('.footer_loading').style.display = 'block'
+        document.querySelector('.cover_loading').style.display = 'block'
+      } else {
+        document.querySelector('.footer_loading') && document.querySelector('.footer_loading').remove()
+        document.querySelector('.cover_loading') && document.querySelector('.cover_loading').remove()
+      }
+    }
+    initCover()
+
     var current;
     var interval;
     const mobileCheck = function () {
@@ -232,6 +301,7 @@
     }
     initFakeLoading()
     addEventListener('hashchange', (event) => {
+      initCover()
       initFakeLoading()
     });
 
@@ -250,11 +320,11 @@
 
   </script>
   <script src="adapter.min.js"></script>
-  <script src="mindar-image.prod.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js" defer></script>
+  <script src="mindar-image.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
 
-  <script src="mindar-image-aframe.prod.js" defer></script>
-  <script type="module" src="/src/main.js" defer></script>
+  <script src="mindar-image-aframe.prod.js"></script>
+  <script type="module" src="/src/main.js"></script>
   <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
 
   <script>

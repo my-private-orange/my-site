@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <a-scene
-      mindar-image="imageTargetSrc:  https://img.vrwenbo.com/rtf7d42gczeuv9k0ijpq3m1xl5hyswbn.mind;"
+      mindar-image="imageTargetSrc:  https://img.vrwenbo.com/lkwi750rhfz3p1utc6naoqmedb92gs48.mind;"
       color-space="sRGB"
       renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"
@@ -62,6 +62,9 @@ const urls = ref([
   'https://tool.vrwen.com/#/modelDetail?id=86141632457609216&type=1',
   'https://tool.vrwen.com/#/modelDetail?id=86100401790783488&type=1',
   'https://tool.vrwen.com/#/modelDetail?id=85687192885792768&type=1',
+  'https://tool.vrwen.com/#/modelDetail?id=89686546751557632&type=1',
+  'https://tool.vrwen.com/#/modelDetail?id=90100471322251264&type=1',
+  'https://tool.vrwen.com/#/modelDetail?id=82123942621483008&type=1',
 ]);
 let imageIndex = 1;
 onMounted(() => {

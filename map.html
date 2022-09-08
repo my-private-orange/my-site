@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/skongmiao/favicon.ico" />
+  <!-- <link rel="stylesheet" href="loading.css" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+  <title>智慧孔庙</title>
+  <!-- <link href="/public/fonts.css"> -->
+
+  <style>
+    #__vconsole {
+      display: none;
+    }
+  </style>
+  <script type="module" crossorigin src="/skongmiao/assets/index.bf349913.js"></script>
+  <link rel="stylesheet" href="/skongmiao/assets/index.43f0d80c.css">
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+  <script>
+    function ready () {
+      window.isWechat = window.__wxjs_environment === 'miniprogram';
+    }
+    if (!window.WeixinJSBridge || !WeixinJSBridge.invoke) {
+      document.addEventListener('WeixinJSBridgeReady', ready, false)
+    } else {
+      ready()
+    }
+
+  </script>
+  <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+
+  <script>
+    // 初始化
+    var vConsole = new VConsole();
+    var touchcount = 0;
+    var lastTouchTime;
+    function isHidden (el) {
+      var style = window.getComputedStyle(el);
+      return (style.display === 'none')
+    }
+    window.addEventListener('touchstart', (event) => {
+      const elem = document.querySelector('#__vconsole');
+      if (touchcount > 15) {
+        if (isHidden(elem)) {
+          elem.style.display = 'block'
+        } else {
+          elem.style.display = 'none'
+        }
+        touchcount = 0;
+        return;
+      }
+
+      lastTouchTime = Date.now()
+
+    })
+
+    window.addEventListener('touchend', (event) => {
+      const touch = event.touches[0] || event.changedTouches[0]
+      if (touch && touch.clientX < 50 && touch.clientY < 50) {
+        if (Date.now() - lastTouchTime < 300) {
+          touchcount++;
+        } else {
+          touchcount = 0;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

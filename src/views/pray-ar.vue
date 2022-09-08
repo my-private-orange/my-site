@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <a-scene
-      mindar-image="imageTargetSrc: https://img.vrwenbo.com/kj7ugy53dq91bwehcixrlnav4fzop628.mind;"
+      mindar-image="imageTargetSrc: https://img.vrwenbo.com/xv3h2limkgcy41swaq0597ro68fzndpt.mind;"
       color-space="sRGB"
       renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"
@@ -65,6 +65,20 @@
           rotation="0 0 0"
         ></a-plane>
       </a-entity>
+      <a-entity
+        id="target-4"
+        mindar-image-target="targetIndex: 3"
+      >
+        <a-plane
+          id="word-plane-4"
+          material="transparent: true"
+          src="#word"
+          position="0 0 0"
+          :height="387 / 366"
+          width="1"
+          rotation="0 0 0"
+        ></a-plane>
+      </a-entity>
     </a-scene>
   </div>
 </template>
@@ -86,11 +100,12 @@ onMounted(() => {
     console.log('ar-ready');
     window.dispatchEvent(window.pageLoadedEvent);
   });
-  for (var i = 1; i <= 3; i++) {
+  for (var i = 1; i <= 4; i++) {
     (function (index) {
+      const wordIndex = index === 4 ? 1 : index;
       const targetElem = document.querySelector(`#target-${index}`);
       targetElem.addEventListener('targetFound', () => {
-        wordImageUrl.value = new URL(`../assets/image/words/${imageIndex}_${index}-min.png`, import.meta.url).href;
+        wordImageUrl.value = new URL(`../assets/image/words/${imageIndex}_${wordIndex}-min.png`, import.meta.url).href;
         console.log('targetFound', index);
       });
       targetElem.addEventListener('targetLost', () => {
@@ -101,7 +116,7 @@ onMounted(() => {
           imageIndex++;
         }
         document.querySelector(`#word-plane-${index}`).setAttribute('src', '');
-        wordImageUrl.value = new URL(`../assets/image/words/${imageIndex}_${index}-min.png`, import.meta.url).href;
+        wordImageUrl.value = new URL(`../assets/image/words/${imageIndex}_${wordIndex}-min.png`, import.meta.url).href;
         // wordImageUrl.value = new URL(`../assets/image/test.png`, import.meta.url).href;
         nextTick(() => {
           document.querySelector(`#word-plane-${index}`).setAttribute('src', '#word');

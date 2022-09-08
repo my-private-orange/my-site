@@ -1,5 +1,6 @@
 <template>
   <div class="content">
+    <audio id="audio" />
     <!-- <my-navigation-bar title="智慧孔庙"></my-navigation-bar> -->
     <page-frame ref="frame">
       <div class="title">
@@ -117,7 +118,7 @@
       </div>
       <div
         class="footer"
-        :style="isAnimating ? { transform: `scale(0.9)` } : {}"
+        :style="{ transform: `scale(0.9)` }"
       >
         <template v-if="isAnimating">
           <styled-button
@@ -136,19 +137,26 @@
             {{ isWalking ? '暂停' : '继续' }}
           </styled-button>
         </template>
-        <styled-button
-          class="darker"
-          darker
-          @click="showRoutes"
-          v-else
-        >
-          <img
-            :src="buttonIconUrl"
-            mode="aspectFit"
-            class="route-icon"
-          />
-          路线推荐
-        </styled-button>
+        <template v-else>
+          <styled-button
+            class="darker"
+            darker
+            @click="showRoutes"
+          >
+            <img
+              :src="buttonIconUrl"
+              mode="aspectFit"
+              class="route-icon"
+            />
+            路线推荐
+          </styled-button>
+          <styled-button
+            class="voice-btn"
+            @click="startVoice"
+          >
+            语音导览
+          </styled-button>
+        </template>
       </div>
     </page-frame>
 
@@ -321,6 +329,7 @@ export default {
         this.initCanvas({ keepScale: true });
       }
     },
+    startVoice() {},
   },
   mounted() {
     const frameRef = document.querySelector('.frame');
