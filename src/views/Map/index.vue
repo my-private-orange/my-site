@@ -120,6 +120,40 @@
         class="footer"
         :style="{ transform: `scale(0.9)` }"
       >
+        <div
+          class="player"
+          v-show="showPlayer"
+        >
+          <div
+            class="play-pause"
+            @click="isPlaying = !isPlaying"
+          >
+            <img
+              v-show="!isPlaying"
+              src="../../assets/image/play.svg"
+              alt=""
+            />
+            <img
+              v-show="isPlaying"
+              src="../../assets/image/pause.svg"
+              alt=""
+            />
+          </div>
+          <div class="progress">
+            <div class="progress-bar"></div>
+            <div
+              class="progress-content"
+              :style="{ width: `${voiceProgress * 100}%` }"
+            >
+              <div
+                class="progress-controller"
+                @touchstart.prevent="onTouchStart"
+                @touchend.prevent="onTouchEnd"
+                @touchmove.prevent="onTouchMove"
+              ></div>
+            </div>
+          </div>
+        </div>
         <template v-if="isAnimating">
           <styled-button
             class="back-btn"
@@ -270,9 +304,23 @@ export default {
       hiddenOverlayIndexs: [],
       showModal: false,
       hasFinishedWalking: false,
+      voiceCurrentTime: 0,
+      voice: {
+        duration: 10000,
+        src: '',
+      },
+      isDragging: false,
+      lastTouchX: 0,
+      playerControllerOffset: 0,
+      progressWidth: 0,
+      showPlayer: false,
+      isPlaying: false,
     };
   },
   computed: {
+    voiceProgress() {
+      return this.progressWidth ? this.playerControllerOffset / this.progressWidth : 0;
+    },
     canvasHeight() {
       console.log('this.frameHeight', this.frameHeight);
       console.log('this.titleBottomY', this.titleBottomY);
@@ -329,7 +377,14 @@ export default {
         this.initCanvas({ keepScale: true });
       }
     },
-    startVoice() {},
+
+    showPlayer() {
+      if (this.showPlayer) {
+        this.$nextTick(() => {
+          this.progressWidth = document.querySelector('.progress-bar').getBoundingClientRect().width;
+        });
+      }
+    },
   },
   mounted() {
     const frameRef = document.querySelector('.frame');
@@ -821,7 +876,32 @@ export default {
         y,
       };
     },
-    showTuliModal() {},
+    onTouchStart(evt) {
+      this.isDragging = true;
+      this.lastTouchX = evt.touches[0].clientX;
+    },
+    onTouchMove(evt) {
+      if (!this.isDragging) return;
+      const delta = evt.touches[0].clientX - this.lastTouchX;
+      console.log(delta);
+      const result = this.playerControllerOffset + delta;
+      if (result <= 0) {
+        this.playerControllerOffset = 0;
+      } else if (result < this.progressWidth) {
+        this.playerControllerOffset += delta;
+      } else {
+        this.playerControllerOffset = this.progressWidth;
+      }
+      this.lastTouchX = evt.touches[0].clientX;
+    },
+    onTouchEnd(evt) {
+      this.isDragging = false;
+      this.lastTouchX = 0;
+    },
+
+    startVoice() {
+      this.showPlayer = true;
+    },
   },
 };
 </script>
@@ -833,6 +913,65 @@ export default {
   background-position: center 2.25rem;
   width: 100%;
   height: 100%;
+
+  .player {
+    position: absolute;
+    top: -60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    .play-pause {
+      width: 24px;
+      height: 24px;
+
+      img {
+        width: 24px;
+        height: 24px;
+        display: block;
+      }
+    }
+
+    .progress {
+      width: 90%;
+      margin-left: 5%;
+      min-width: 0;
+      position: relative;
+      height: 6px;
+
+      .progress-bar {
+        height: 6px;
+        background-color: #d1d1d1;
+        border-radius: 3px;
+        position: absolute;
+        left: 0;
+        right: 0;
+      }
+
+      .progress-content {
+        height: 6px;
+        background-color: #a23427;
+        border-radius: 3px;
+        position: absolute;
+        left: 0;
+        // right: calc(100% - 0px);
+        transition: all 0.1s;
+
+        .progress-controller {
+          position: absolute;
+          right: -7px;
+          width: 14px;
+          height: 14px;
+          border-radius: 7px;
+          border: 2px solid #b99e5f;
+          background-color: white;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
 
   .frame .frame-content {
     padding-top: 2.0625rem !important;

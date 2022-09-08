@@ -102,7 +102,7 @@ onMounted(() => {
   });
   for (var i = 1; i <= 4; i++) {
     (function (index) {
-      const wordIndex = index === 4 ? 1 : index;
+      const wordIndex = index;
       const targetElem = document.querySelector(`#target-${index}`);
       targetElem.addEventListener('targetFound', () => {
         wordImageUrl.value = new URL(`../assets/image/words/${imageIndex}_${wordIndex}-min.png`, import.meta.url).href;
